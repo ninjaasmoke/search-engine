@@ -60,6 +60,8 @@ WORKDIR /app
 
 COPY --from=backend-builder /app/search_engine ./
 COPY --from=frontend-builder /app/front/dist ./dist
+COPY --from=backend-builder /app/document_info_map.json ./
+COPY --from=backend-builder /app/final_inverted_index.json ./
 
 EXPOSE 8080
 
