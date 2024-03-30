@@ -228,7 +228,7 @@ func searchHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func frontendHandler(w http.ResponseWriter, r *http.Request) {
-	http.FileServer(http.Dir("./front/dist")).ServeHTTP(w, r)
+	http.FileServer(http.Dir("./dist")).ServeHTTP(w, r)
 
 }
 
