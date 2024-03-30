@@ -1,0 +1,61 @@
+<div class="search-component">
+  <input type="text" id="searchInput" placeholder="Search...cats and dogs" />
+</div>
+
+<style>
+  .search-component {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: space-between;
+    margin: 4rem 0;
+  }
+
+  input {
+    padding: 0.7rem;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 0.25rem;
+    width: 100%;
+    outline: none;
+  }
+
+  button {
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 0.25rem;
+    cursor: pointer;
+  }
+
+  button:hover {
+    background-color: #0056b3;
+  }
+</style>
+
+<script>
+  const searchInput = document.getElementById(
+    "searchInput"
+  ) as HTMLInputElement;
+  searchInput.focus();
+  function handleSearch() {
+    const searchInput = document.getElementById(
+      "searchInput"
+    ) as HTMLInputElement;
+    if (searchInput) {
+      const searchTerm = searchInput.value;
+      console.log("Search term:", searchTerm);
+      if (searchTerm) {
+        window.location.href = `/search?q=${searchTerm}`;
+      }
+    } else {
+      console.error("Search input element not found");
+    }
+  }
+  searchInput.addEventListener("keyup", (event) => {
+    if (event.key === "Enter") {
+      handleSearch();
+    }
+  });
+</script>

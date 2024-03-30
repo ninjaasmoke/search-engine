@@ -1,0 +1,26 @@
+---
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout title="Search">
+  <p id="search-query"></p>
+</Layout>
+
+<script>
+  const urlSearchParams = new URLSearchParams(window.location.search);
+  const params = Object.fromEntries(urlSearchParams.entries());
+
+  const showSearch = document.getElementById(
+    "search-query"
+  ) as HTMLParagraphElement;
+
+  showSearch.innerHTML = `You searched for: ${params.q || "(no query)"}`; // Use q from searchData
+
+  const response = await fetch(
+    `${window.location.origin}/api/search?q=${params.q}`
+  );
+
+  const searchData = await response.json();
+
+  console.log(searchData);
+</script>
