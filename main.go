@@ -2,13 +2,16 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 	"math"
 	"net/http"
 	"os"
+	"sort"
 	"strings"
 	"sync"
 
+	stemmer "github.com/agonopol/go-stem"
 	"github.com/kljensen/snowball/english"
 )
 
@@ -54,19 +57,24 @@ func CorsMiddleware(next http.Handler) http.Handler {
 		next.ServeHTTP(w, r)
 	})
 }
+
+func Stem(s string) string {
+	return string(stemmer.Stem([]byte(s)))
+}
+
 func tokenizeText(text string) []string {
 	// Split text into words
 	words := strings.Fields(text)
 
 	var tokens []string
 
-	// Lemmatize and filter stopwords
+	// filter stopwords
 	for _, word := range words {
 		word = strings.ToLower(word)
 		if !english.IsStopWord(word) {
-			// Lemmatize the word
-			word = english.Stem(word, true)
-			tokens = append(tokens, word)
+			// Stem the word
+			stemmedWord := Stem(word)
+			tokens = append(tokens, stemmedWord)
 		}
 	}
 
@@ -188,10 +196,14 @@ func searchHandler(w http.ResponseWriter, r *http.Request) {
 
 	queryTerms := tokenizeText(query)
 
+	fmt.Println(queryTerms)
+
 	idf := make(map[string]float64)
 	for _, term := range queryTerms {
 		idf[term] = math.Log(float64(totalDocs) / float64(documentFrequency[term]+1))
 	}
+
+	fmt.Println(idf)
 
 	documentScores := make(map[string]float64)
 	for _, term := range queryTerms {
@@ -210,14 +222,16 @@ func searchHandler(w http.ResponseWriter, r *http.Request) {
 		rankedDocuments = append(rankedDocuments, docID)
 	}
 
-	documentURLs := make(map[string]bool)
+	sort.Strings(rankedDocuments)
+
+	documentTitles := make(map[string]bool)
 	var uniqueRankedDocuments []string
 
 	for _, docID := range rankedDocuments {
 		imageData, found := documentInfoMap[docID]
 		if found {
-			if _, exists := documentURLs[imageData.Title]; !exists {
-				documentURLs[imageData.Title] = true
+			if _, exists := documentTitles[imageData.Title]; !exists {
+				documentTitles[imageData.Title] = true
 				uniqueRankedDocuments = append(uniqueRankedDocuments, docID)
 				if len(uniqueRankedDocuments) >= 30 {
 					break
