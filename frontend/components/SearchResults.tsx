@@ -20,22 +20,27 @@ function SearchResults({ searchResults }: SearchResultsProps) {
   }
 
   // split the search results into 3 even columns
-  const column1 = searchResults.slice(0, Math.ceil(searchResults.length / 3));
-  const column2 = searchResults.slice(
-    column1.length,
-    column1.length + Math.ceil(searchResults.length / 3)
-  );
-  const column3 = searchResults.slice(
-    column1.length + column2.length,
-    searchResults.length
-  );
+  const column1: SearchData[] = [];
+  const column2: SearchData[] = [];
+  const column3: SearchData[] = [];
+
+  searchResults.forEach((result, index) => {
+    if (index % 3 === 0) {
+      column1.push(result);
+    } else if (index % 3 === 1) {
+      column2.push(result);
+    } else {
+      column3.push(result);
+    }
+  });
+
   return (
     <div className="gridContainer">
       <div className="gridItem">
         {column1.map((result, index) => (
           <div key={`${result.title}-${index}`}>
             <img
-              src={cleanImageUrl(result.url, 300)}
+              src={cleanImageUrl(result.url, 400)}
               alt={result.title}
               className="image"
             />
@@ -46,7 +51,7 @@ function SearchResults({ searchResults }: SearchResultsProps) {
         {column2.map((result, index) => (
           <div key={`${result.title}-${index}`}>
             <img
-              src={cleanImageUrl(result.url, 300)}
+              src={cleanImageUrl(result.url, 400)}
               alt={result.title}
               className="image"
             />
@@ -57,7 +62,7 @@ function SearchResults({ searchResults }: SearchResultsProps) {
         {column3.map((result, index) => (
           <div key={`${result.title}-${index}`}>
             <img
-              src={cleanImageUrl(result.url, 300)}
+              src={cleanImageUrl(result.url, 400)}
               alt={result.title}
               className="image"
             />
