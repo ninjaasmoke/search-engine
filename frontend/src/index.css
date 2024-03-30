@@ -1,0 +1,35 @@
+:root {
+  font-family: 'Product Sans', sans-serif;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+*, html {
+  box-sizing: border-box;
+  font-family: 'Product Sans', sans-serif;
+}
+
+body {
+  margin: auto;
+  width: 800px;
+}
+
+h1, h2, h3, h4 {
+  font-family: 'Product Sans Black', sans-serif;
+}
+
+input {
+  font-family: 'Product Sans', sans-serif;
+  padding: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 0.25rem;
+  width: 100%;
+  font-size: 1rem;
+}
+
+input:focus {
+  outline: 1px solid #777;
+}

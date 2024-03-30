@@ -32,11 +32,11 @@
 # Stage 1: Build the frontend assets
 FROM node:latest AS frontend-builder
 
-WORKDIR /app/front
+WORKDIR /app/frontend
 
-COPY front/package.json front/package-lock.json ./
+COPY frontend/package.json frontend/package-lock.json ./
 RUN npm install
-COPY front/. .
+COPY frontend/. .
 RUN npm run build
 
 # Stage 2: Build the Go binary
@@ -59,7 +59,7 @@ FROM golang:latest
 WORKDIR /app
 
 COPY --from=backend-builder /app/search_engine ./
-COPY --from=frontend-builder /app/front/dist ./dist
+COPY --from=frontend-builder /app/frontend/dist ./dist
 COPY --from=backend-builder /app/document_info_map.json ./
 COPY --from=backend-builder /app/final_inverted_index.json ./
 

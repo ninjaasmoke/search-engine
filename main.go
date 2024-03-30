@@ -6,7 +6,6 @@ import (
 	"math"
 	"net/http"
 	"os"
-	"sort"
 	"strings"
 	"sync"
 
@@ -14,6 +13,7 @@ import (
 )
 
 type ImageData struct {
+	ID                 string   `json:"id"`
 	URL                string   `json:"url"`
 	Title              string   `json:"title"`
 	RelatedImageTags   []string `json:"related_image_tags"`
@@ -34,6 +34,26 @@ var (
 	documentFrequency map[string]int
 )
 
+// CorsMiddleware adds CORS headers to every request
+func CorsMiddleware(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		// Set CORS headers
+		w.Header().Set("Access-Control-Allow-Origin", "*")                            // Allow requests from any origin
+		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")          // Allow the HTTP methods you need
+		w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization") // Allow the headers you need
+		w.Header().Set("Access-Control-Allow-Credentials", "true")                    // Allow credentials such as cookies (if your client sends them)
+
+		// Check if it's a preflight request
+		if r.Method == "OPTIONS" {
+			// Preflight requests need to be handled with a 200 OK response
+			w.WriteHeader(http.StatusOK)
+			return
+		}
+
+		// Call the next handler in the chain
+		next.ServeHTTP(w, r)
+	})
+}
 func tokenizeText(text string) []string {
 	// Split text into words
 	words := strings.Fields(text)
@@ -190,29 +210,33 @@ func searchHandler(w http.ResponseWriter, r *http.Request) {
 		rankedDocuments = append(rankedDocuments, docID)
 	}
 
-	sort.Slice(rankedDocuments, func(i, j int) bool {
-		return documentScores[rankedDocuments[i]] > documentScores[rankedDocuments[j]]
-	})
+	documentURLs := make(map[string]bool)
+	var uniqueRankedDocuments []string
 
-	// Return top 20 documents
-	if len(rankedDocuments) > 20 {
-		rankedDocuments = rankedDocuments[:20]
-	}
-
-	// Retrieve ImageData for the top 20 documents
-	mapLock.RLock()
-	defer mapLock.RUnlock()
-
-	var imageDatas []ImageData
 	for _, docID := range rankedDocuments {
 		imageData, found := documentInfoMap[docID]
 		if found {
-			imageDatas = append(imageDatas, imageData)
+			if _, exists := documentURLs[imageData.Title]; !exists {
+				documentURLs[imageData.Title] = true
+				uniqueRankedDocuments = append(uniqueRankedDocuments, docID)
+				if len(uniqueRankedDocuments) >= 30 {
+					break
+				}
+			}
+		}
+	}
+
+	// Retrieve ImageData for the top 30 unique documents
+	var uniqueImageDatas []ImageData
+	for _, docID := range uniqueRankedDocuments {
+		imageData, found := documentInfoMap[docID]
+		if found {
+			uniqueImageDatas = append(uniqueImageDatas, imageData)
 		}
 	}
 
 	// Marshal ImageData to JSON
-	responseJSON, err := json.Marshal(imageDatas)
+	responseJSON, err := json.Marshal(uniqueImageDatas)
 	if err != nil {
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 		log.Println("Error marshaling JSON:", err)
@@ -253,7 +277,9 @@ func main() {
 	// Define a route for the root URL
 	mux.HandleFunc("/", frontendHandler)
 
+	wrappedMux := CorsMiddleware(mux)
+
 	// Start HTTP server
 	log.Println("Server listening on port 8080...")
-	log.Fatal(http.ListenAndServe(":8080", mux))
+	log.Fatal(http.ListenAndServe(":8080", wrappedMux))
 }
