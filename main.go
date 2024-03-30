@@ -228,6 +228,10 @@ func searchHandler(w http.ResponseWriter, r *http.Request) {
 
 }
 
+func helloHandler(w http.ResponseWriter, r *http.Request) {
+	w.Write([]byte("Hello, World!"))
+}
+
 func main() {
 	docInfoFile := "document_info_map.json"
 	invertedIndexFile := "final_inverted_index.json"
@@ -241,6 +245,7 @@ func main() {
 	}
 
 	// Define HTTP handlers
+	http.HandleFunc("/", helloHandler)
 	http.HandleFunc("/imageData/", imageDataHandler)
 	http.HandleFunc("/search", searchHandler)
 
