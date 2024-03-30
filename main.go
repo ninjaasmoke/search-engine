@@ -227,7 +227,7 @@ func searchHandler(w http.ResponseWriter, r *http.Request) {
 
 }
 
-func helloHandler(w http.ResponseWriter, r *http.Request) {
+func frontendHandler(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte("Hello, World!"))
 }
 
@@ -250,7 +250,7 @@ func main() {
 	mux.HandleFunc("/api/search", searchHandler)
 
 	// Define a route for the root URL
-	mux.HandleFunc("/", helloHandler)
+	mux.HandleFunc("/", frontendHandler)
 
 	// Start HTTP server
 	log.Println("Server listening on port 8080...")
