@@ -203,8 +203,6 @@ func searchHandler(w http.ResponseWriter, r *http.Request) {
 		idf[term] = math.Log(float64(totalDocs) / float64(documentFrequency[term]+1))
 	}
 
-	fmt.Println(idf)
-
 	documentScores := make(map[string]float64)
 	for _, term := range queryTerms {
 		if info, found := invertedIndexMap[term]; found {
