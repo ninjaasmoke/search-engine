@@ -1,3 +1,5 @@
+github.com/agonopol/go-stem v0.0.0-20150630113328-985885018250 h1:znLjWXbvRGRvFlxYoiRu4Yf38isHmYYG07scbZKKg9I=
+github.com/agonopol/go-stem v0.0.0-20150630113328-985885018250/go.mod h1:JpR7ykfRJUCcS6aOUCB6dPImrYufY0NoBCDg/wqeIIo=
 github.com/kljensen/snowball v0.9.0 h1:OpXkQBcic6vcPG+dChOGLIA/GNuVg47tbbIJ2s7Keas=
 github.com/kljensen/snowball v0.9.0/go.mod h1:OGo5gFWjaeXqCu4iIrMl5OYip9XUJHGOU5eSkPjVg2A=
 github.com/yourbasic/radix v0.0.0-20180308122924-cbe1cc82e907 h1:S5h7yNKStqF8CqFtgtMNMzk/lUI3p82LrX6h2BhlsTM=
