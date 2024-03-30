@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 	"log"
 	"math"
 	"net/http"
@@ -244,12 +243,16 @@ func main() {
 		log.Fatal(err)
 	}
 
-	// Define HTTP handlers
-	http.HandleFunc("/", helloHandler)
-	http.HandleFunc("/imageData/", imageDataHandler)
-	http.HandleFunc("/search", searchHandler)
+	mux := http.NewServeMux()
+
+	// Define API routes with "/api" prefix
+	mux.HandleFunc("/api/imageData/", imageDataHandler)
+	mux.HandleFunc("/api/search", searchHandler)
+
+	// Define a route for the root URL
+	mux.HandleFunc("/", helloHandler)
 
 	// Start HTTP server
-	fmt.Println("Server listening on port 8080...")
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	log.Println("Server listening on port 8080...")
+	log.Fatal(http.ListenAndServe(":8080", mux))
 }
