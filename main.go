@@ -245,6 +245,6 @@ func main() {
 	http.HandleFunc("/search", searchHandler)
 
 	// Start HTTP server
-	fmt.Println("Server listening on port 7070...")
-	log.Fatal(http.ListenAndServe(":7070", nil))
+	fmt.Println("Server listening on port 8080...")
+	log.Fatal(http.ListenAndServe(":8080", nil))
 }
