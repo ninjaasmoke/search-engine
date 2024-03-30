@@ -2,12 +2,15 @@ import SearchInputComponent from "../components/SearchInput.component";
 
 import { useEffect, useState } from "react";
 import "./App.css";
+import { useNavigate } from "react-router-dom";
 
 function App() {
+  const navigate = useNavigate();
   const [searchText, setSearchText] = useState("");
 
   const handleSearch = async () => {
-    window.location.href = `/search?q=${searchText}`;
+    // window.location.href = `/search?q=${searchText}`;
+    navigate(`/search?q=${searchText}`);
   };
 
   useEffect(() => {
