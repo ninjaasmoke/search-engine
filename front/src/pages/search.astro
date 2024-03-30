@@ -4,11 +4,43 @@ import Layout from "../layouts/Layout.astro";
 
 <Layout title="Search">
   <p id="search-query"></p>
+  <div class="grid-container" id="imageGrid">
+    <div class="grid-container-1" id="grid-container-1"></div>
+    <div class="grid-container-2" id="grid-container-2"></div>
+    <div class="grid-container-3" id="grid-container-3"></div>
+  </div>
 </Layout>
+
+<style>
+  .grid-container {
+    width: 1000px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    padding: 20px;
+  }
+
+  .grid-container-1,
+  .grid-container-2,
+  .grid-container-3 {
+    display: flex;
+    gap: 20px;
+    flex-direction: column;
+    width: 100%;
+  }
+</style>
 
 <script>
   const urlSearchParams = new URLSearchParams(window.location.search);
   const params = Object.fromEntries(urlSearchParams.entries());
+
+  type ImageDataType = {
+    url: string;
+    title: string;
+    related_image_tags?: string[];
+    annotated_image_tags?: string[];
+  };
 
   const showSearch = document.getElementById(
     "search-query"
@@ -18,9 +50,46 @@ import Layout from "../layouts/Layout.astro";
 
   const response = await fetch(
     `${window.location.origin}/api/search?q=${params.q}`
+    // `http://localhost:8080/api/search?q=${params.q}`
   );
 
-  const searchData = await response.json();
+  const searchData = (await response.json()) as ImageDataType[];
 
-  console.log(searchData);
+  function createImageGrid(images: ImageDataType[]) {
+    var i = 0;
+    images.forEach(function (imageData: ImageDataType) {
+      var gridContainer: HTMLDivElement;
+
+      if (i % 3 === 0) {
+        gridContainer = document.getElementById(
+          "grid-container-1"
+        ) as HTMLDivElement;
+      } else if (i % 3 === 1) {
+        gridContainer = document.getElementById(
+          "grid-container-2"
+        ) as HTMLDivElement;
+      } else {
+        gridContainer = document.getElementById(
+          "grid-container-3"
+        ) as HTMLDivElement;
+      }
+
+      var containerItem = document.createElement("div") as HTMLDivElement;
+      var imageUrl = imageData.url;
+      var imageTitle = imageData.title;
+
+      var image = document.createElement("img") as HTMLImageElement;
+      image.src = imageUrl;
+      image.alt = imageTitle;
+      image.style.width = "100%";
+      image.style.height = "auto";
+
+      containerItem.appendChild(image);
+      gridContainer.appendChild(containerItem);
+
+      i++;
+    });
+  }
+
+  createImageGrid(searchData);
 </script>
