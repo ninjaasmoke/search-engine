@@ -3,3 +3,11 @@ h1 {
     text-align: center;
     margin: 3rem;
 }
+
+.searchArea {
+    position: sticky;
+    top: 0;
+    background-color: white;
+    z-index: 999;
+    padding: 20px 0;
+}
