@@ -59,6 +59,7 @@ func main() {
 	ctx := context.WithValue(context.Background(), types.AppDataKey{}, appData)
 
 	// Define API routes with "/api" prefix
+	mux.HandleFunc("/api/ping/", http.HandlerFunc(api.PingHandler))
 	mux.HandleFunc("/api/imageData/", func(w http.ResponseWriter, r *http.Request) {
 		api.ImageDataHandler(w, r.WithContext(ctx))
 	})
@@ -75,5 +76,5 @@ func main() {
 
 	// Start HTTP server
 	log.Println("Server listening on port 8080...")
-	log.Fatal(http.ListenAndServe("localhost:8080", wrappedMux))
+	log.Fatal(http.ListenAndServe(":8080", wrappedMux))
 }
