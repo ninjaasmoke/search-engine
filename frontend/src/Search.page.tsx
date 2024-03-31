@@ -4,6 +4,7 @@ import SearchResults from "../components/SearchResults";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { SearchData } from "../types";
+import { API_URL_DEV, API_URL_PROD } from "../constants";
 
 function Search() {
   const navigate = useNavigate();
@@ -18,8 +19,9 @@ function Search() {
 
   const fetchSearchResults = async () => {
     const response = await fetch(
-      `${window.location.origin}/api/search?q=${searchText}`
-      // `http://localhost:8080/api/search?q=${searchText.trim()}`
+      import.meta.env.MODE == "production"
+      ? `${API_URL_PROD}search?q=${searchText.trim()}`
+      : `${API_URL_DEV}search?q=${searchText.trim()}`
     );
     if (!response.ok) {
       console.error("Failed to fetch search results");
