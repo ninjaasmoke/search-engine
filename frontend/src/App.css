@@ -4,9 +4,55 @@ h1 {
     margin: 3rem;
 }
 
+a {
+    text-decoration: none;
+    color: #0c3876;
+    font-family: 'Product Sans Medium', sans-serif;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
 .searchArea {
     position: sticky;
     top: 0;
+    padding: 20px 0;
     background-color: white;
     z-index: 999;
+}
+
+.imagePage {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: start;
+    gap: 20px;
+    padding-bottom: 20px;
+}
+
+@media (max-width: 800px) {
+    .imagePage {
+        flex-direction: column-reverse;
+        align-items: center;
+    }
+}
+
+.imagePage img {
+    width: 100%;
+    max-width: 500px;
+    border-radius: 0.25rem;
+}
+
+.imageTags {
+    display: flex;
+    width: 100%;
+    justify-content: start;
+    gap: 20px;
+}
+
+@media (max-width: 800px) {
+    .imageTags {
+        flex-direction: column;
+    }
 }
