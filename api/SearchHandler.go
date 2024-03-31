@@ -109,14 +109,28 @@ func SearchHandler(w http.ResponseWriter, r *http.Request) {
 	// Rank documents based on cosine similarity
 	rankedDocuments := utils.RankDocuments(queryVector, appData.DocumentVectors)
 
-	// Retrieve top 30 documents
-	topDocuments := rankedDocuments[:30]
+	topDocuments := rankedDocuments[:60]
 
+	// Create a map to store unique URLs
+	uniqueURLs := make(map[string]struct{})
+
+	// Slice to store unique ImageData entries
 	uniqueImageDatas := make([]types.ImageData, 0, len(topDocuments))
+
+	// Iterate over topDocuments to filter out duplicates based on URL
 	for _, docID := range topDocuments {
 		imageData, found := appData.DocumentInfoMap[docID]
 		if found {
-			uniqueImageDatas = append(uniqueImageDatas, imageData)
+			// Clean the URL
+			cleanedURL := utils.CleanImageURL(imageData.URL, 400)
+
+			// Check if the cleaned URL is already in the map of unique URLs
+			_, exists := uniqueURLs[cleanedURL]
+			if !exists {
+				// If URL is not found, add the ImageData to the slice and mark the URL as encountered
+				uniqueImageDatas = append(uniqueImageDatas, imageData)
+				uniqueURLs[cleanedURL] = struct{}{}
+			}
 		}
 	}
 
