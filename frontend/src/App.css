@@ -31,7 +31,7 @@ a:hover {
     padding-bottom: 20px;
 }
 
-@media (max-width: 800px) {
+@media (max-width: 950px) {
     .imagePage {
         flex-direction: column-reverse;
         align-items: center;
@@ -51,8 +51,21 @@ a:hover {
     gap: 20px;
 }
 
-@media (max-width: 800px) {
+@media (max-width: 950px) {
     .imageTags {
         flex-direction: column;
+        gap: 0;
+    }
+
+    .imagePage img {
+        position: relative;
+    }
+}
+
+@media (max-width: 480px) {
+    .imagePage img {
+        position: sticky;
+        top: 0;
+        padding-top: 20px;
     }
 }
