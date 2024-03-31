@@ -1,19 +1,13 @@
 import { useEffect } from "react";
 import { SearchData } from "../types";
 
+import SearchImage from "./SearchImage";
+
 import "./SearchResults.css";
 
 type SearchResultsProps = {
   searchResults: SearchData[];
 };
-
-function cleanImageUrl(url: string, width: number) {
-  const cleanedUrl = url.replace(/(\?|\&)(q|auto|fit|ixlib|ixid)=[^&]+/g, "");
-  const replacedUrl = cleanedUrl.replace(/(\?|\&)w=[^&]+/g, "");
-  const modifiedUrl =
-    replacedUrl + (replacedUrl.includes("?") ? "&" : "?") + "w=" + width;
-  return modifiedUrl;
-}
 
 function SearchResults({ searchResults }: SearchResultsProps) {
   if (searchResults.length === 0) {
@@ -54,80 +48,42 @@ function SearchResults({ searchResults }: SearchResultsProps) {
     }
   }, [searchResults]);
 
-  useEffect(() => {}, []);
-
   return (
     <>
       <div id="scrollHere" />
       <div className="gridContainerLg">
         <div className="gridItem">
           {column1Lg.map((result, index) => (
-            <div key={`${result.title}-${index}`}>
-              <img
-                src={cleanImageUrl(result.url, 400)}
-                alt={result.title}
-                className="image"
-              />
-            </div>
+            <SearchImage key={`${result.id}-${index}`} imageData={result} />
           ))}
         </div>
         <div className="gridItem">
           {column2Lg.map((result, index) => (
-            <div key={`${result.title}-${index}`}>
-              <img
-                src={cleanImageUrl(result.url, 400)}
-                alt={result.title}
-                className="image"
-              />
-            </div>
+            <SearchImage key={`${result.id}-${index}`} imageData={result} />
           ))}
         </div>
         <div className="gridItem">
           {column3Lg.map((result, index) => (
-            <div key={`${result.title}-${index}`}>
-              <img
-                src={cleanImageUrl(result.url, 400)}
-                alt={result.title}
-                className="image"
-              />
-            </div>
+            <SearchImage key={`${result.id}-${index}`} imageData={result} />
           ))}
         </div>
       </div>
       <div className="gridContainerMd">
         <div className="gridItem">
           {column1Md.map((result, index) => (
-            <div key={`${result.title}-${index}`}>
-              <img
-                src={cleanImageUrl(result.url, 400)}
-                alt={result.title}
-                className="image"
-              />
-            </div>
+            <SearchImage key={`${result.id}-${index}`} imageData={result} />
           ))}
         </div>
         <div className="gridItem">
           {column2Md.map((result, index) => (
-            <div key={`${result.title}-${index}`}>
-              <img
-                src={cleanImageUrl(result.url, 400)}
-                alt={result.title}
-                className="image"
-              />
-            </div>
+            <SearchImage key={`${result.id}-${index}`} imageData={result} />
           ))}
         </div>
       </div>
 
       <div className="gridContainerSm">
         {searchResults.map((result, index) => (
-          <div key={`${result.title}-${index}`}>
-            <img
-              src={cleanImageUrl(result.url, 400)}
-              alt={result.title}
-              className="image"
-            />
-          </div>
+          <SearchImage key={`${result.id}-${index}`} imageData={result} />
         ))}
       </div>
     </>
