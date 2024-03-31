@@ -34,6 +34,7 @@ function Search() {
 
   useEffect(() => {
     fetchSearchResults();
+    window.scrollTo({ top: 0 });
   }, []);
 
   useEffect(() => {
