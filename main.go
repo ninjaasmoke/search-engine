@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 	"log"
 	"math"
 	"net/http"
@@ -195,8 +194,6 @@ func searchHandler(w http.ResponseWriter, r *http.Request) {
 	query := r.URL.Query().Get("q")
 
 	queryTerms := tokenizeText(query)
-
-	fmt.Println(queryTerms)
 
 	idf := make(map[string]float64)
 	for _, term := range queryTerms {
