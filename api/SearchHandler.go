@@ -120,6 +120,7 @@ func SearchHandler(w http.ResponseWriter, r *http.Request) {
 	// Iterate over topDocuments to filter out duplicates based on URL
 	for _, docID := range topDocuments {
 		imageData, found := appData.DocumentInfoMap[docID]
+		imageData.ID = docID
 		if found {
 			// Clean the URL
 			cleanedURL := utils.CleanImageURL(imageData.URL, 400)
