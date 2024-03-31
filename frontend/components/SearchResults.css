@@ -25,5 +25,4 @@
 .image:hover {
     cursor: pointer;
     transform: scale(0.93);
-    border-radius: 20px;
 }
