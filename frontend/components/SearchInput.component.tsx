@@ -7,7 +7,7 @@ function SearchInputComponent({ searchText, handleChange }: SearchInputProps) {
   return (
     <input
       type="text"
-      placeholder="Search... cats"
+      placeholder="search... cats"
       value={searchText}
       onChange={(e) => handleChange(e.target.value)}
     />
