@@ -10,11 +10,13 @@
 *, html {
   box-sizing: border-box;
   font-family: 'Product Sans', sans-serif;
+  scroll-behavior: smooth;
 }
 
 body {
   margin: auto;
-  width: 800px;
+  max-width: 1000px;
+  padding: 0 20px;
 }
 
 h1, h2, h3, h4 {
