@@ -48,6 +48,9 @@ COPY go.mod go.sum ./
 RUN go mod download
 
 COPY main.go ./
+COPY api/ ./api/
+COPY types/ ./types/
+COPY utils/ ./utils/
 COPY document_info_map.json ./
 COPY final_inverted_index.json ./
 
