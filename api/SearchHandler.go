@@ -109,7 +109,7 @@ func SearchHandler(w http.ResponseWriter, r *http.Request) {
 	// Rank documents based on cosine similarity
 	rankedDocuments := utils.RankDocuments(queryVector, appData.DocumentVectors)
 
-	topDocuments := rankedDocuments[:60]
+	topDocuments := rankedDocuments[:40]
 
 	// Create a map to store unique URLs
 	uniqueURLs := make(map[string]struct{})
@@ -134,7 +134,7 @@ func SearchHandler(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	responseJSON, err := json.Marshal(uniqueImageDatas)
+	responseJSON, err := json.Marshal(uniqueImageDatas[:33])
 	if err != nil {
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 		log.Println("Error marshaling JSON:", err)
