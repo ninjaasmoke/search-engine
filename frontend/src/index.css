@@ -25,7 +25,7 @@ h1, h2, h3, h4 {
 
 input {
   font-family: 'Product Sans', sans-serif;
-  padding: 1rem;
+  padding: 0.75rem 1rem;
   border: 1px solid #ccc;
   border-radius: 0.25rem;
   width: 100%;
@@ -34,4 +34,13 @@ input {
 
 input:focus {
   outline: 1px solid #777;
+}
+
+strong {
+  font-family: 'Product Sans Bold', sans-serif;
+}
+
+ul {
+  padding: 0 16px;
+  margin: 0;
 }
