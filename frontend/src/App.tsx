@@ -28,12 +28,29 @@ function App() {
   }, [searchText]);
 
   return (
-    <div>
-      <h1>A simple image search engine</h1>
-      <SearchInputComponent
-        searchText={searchText}
-        handleChange={setSearchText}
-      />
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "space-between",
+        alignItems: "center",
+        height: "100vh",
+      }}
+    >
+      <div>
+        <h1>an image search engine.</h1>
+        <div className="searchArea">
+          <SearchInputComponent
+            searchText={searchText}
+            handleChange={(text) => {
+              setSearchText(text);
+            }}
+          />
+        </div>
+      </div>
+      <div style={{ padding: 20 }}>
+        <span>what is this?</span>
+      </div>
     </div>
   );
 }
