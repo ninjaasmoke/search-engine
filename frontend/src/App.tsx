@@ -48,9 +48,42 @@ function App() {
           />
         </div>
       </div>
-      <div style={{ padding: 20, fontSize: 12 }}>
-        <p style={{textAlign: "center"}}>
-          developed by Nithin Sai Kirumani Jagadish as part of CA6005 Mechanics of Search project
+      <div
+        style={{
+          padding: 20,
+          textAlign: "center",
+          maxWidth: 600,
+        }}
+      >
+        <p>
+          A project developed by{" "}
+          <a target="_blank" href="https://github.com/ninjaasmoke">
+            Nithin Sai Kirumani Jagadish
+          </a>{" "}
+          as part of{" "}
+          <a
+            target="_blank"
+            href="https://www.dcu.ie/engineeringandcomputing/mechanics-search"
+          >
+            CA6005 Mechanics of Search
+          </a>{" "}
+          project submitted to{" "}
+          <a target="_blank" href="https://dcu.ie">
+            Dublin City University
+          </a>
+          .
+        </p>
+        <p>
+          This project indexes images from{" "}
+          <a target="_blank" href="https://unsplash.com">
+            Unsplash
+          </a>{" "}
+          and the license for the images can be found{" "}
+          <a target="_blank" href="https://unsplash.com/license">
+            here
+          </a>
+          . This search engine is <strong>NOT</strong> a competitor to Unsplash
+          and is developed for educational purposes only.
         </p>
       </div>
     </div>
