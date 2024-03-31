@@ -1,33 +1,22 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
-import {
-  HashRouter,
-  Route,
-  Routes
-} from "react-router-dom";
-import App from './App.tsx'
-import './index.css'
-import Search from './Search.page.tsx';
+import { HashRouter, Route, Routes } from "react-router-dom";
+import ReactDOM from "react-dom/client";
+import React from "react";
 
-// const router = createHashRouter([
-//   {
-//     path: "/",
-//     element: <App />,
-//   },
-//   {
-//     path: "/search",
-//     element: <Search />,
-//   }
-// ]);
+import ImagePage from "./Image.page.tsx";
+import Search from "./Search.page.tsx";
+import App from "./App.tsx";
 
+import "./index.css";
 
-ReactDOM.createRoot(document.getElementById('root')!).render(
+ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <HashRouter>
       <Routes>
         <Route path="/" element={<App />} />
         <Route path="/search" element={<Search />} />
+        <Route path="/image/:id" element={<ImagePage />} />
+        <Route path="*" element={<App />} />
       </Routes>
     </HashRouter>
-  </React.StrictMode>,
-)
+  </React.StrictMode>
+);
