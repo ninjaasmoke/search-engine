@@ -48,8 +48,10 @@ function App() {
           />
         </div>
       </div>
-      <div style={{ padding: 20 }}>
-        <span>what is this?</span>
+      <div style={{ padding: 20, fontSize: 12 }}>
+        <p>
+          developed by Nithin Sai Kirumani Jagadish as part of CA6005 Mechanics of Search project
+        </p>
       </div>
     </div>
   );
