@@ -28,7 +28,11 @@ a:hover {
     justify-content: space-between;
     align-items: start;
     gap: 20px;
-    padding-bottom: 20px;
+    padding: 4rem 0;
+}
+
+.imagePage h2 {
+    margin-top: 0;
 }
 
 @media (max-width: 950px) {
@@ -39,9 +43,12 @@ a:hover {
 }
 
 .imagePage img {
-    width: 100%;
+    max-height: 500px;
     max-width: 500px;
+    object-fit: contain;
     border-radius: 0.25rem;
+    position: sticky;
+    top: 0;
 }
 
 .imageTags {
@@ -64,8 +71,6 @@ a:hover {
 
 @media (max-width: 480px) {
     .imagePage img {
-        position: sticky;
-        top: 0;
         padding-top: 20px;
     }
 }
