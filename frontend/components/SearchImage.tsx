@@ -1,18 +1,11 @@
 import { Link } from "react-router-dom";
 import { SearchData } from "../types";
 import React from "react";
+import { cleanImageUrl } from "../src/utils/cleanURL";
 
 type SearchImageProps = {
   imageData: SearchData;
 };
-
-function cleanImageUrl(url: string, width: number) {
-  const cleanedUrl = url.replace(/(\?|\&)(q|auto|fit|ixlib|ixid)=[^&]+/g, "");
-  const replacedUrl = cleanedUrl.replace(/(\?|\&)w=[^&]+/g, "");
-  const modifiedUrl =
-    replacedUrl + (replacedUrl.includes("?") ? "&" : "?") + "w=" + width;
-  return modifiedUrl;
-}
 
 const SearchImage: React.FC<SearchImageProps> = ({ imageData }) => {
   return (
