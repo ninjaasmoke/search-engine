@@ -32,41 +32,36 @@ const ImagePage = () => {
   }, []);
 
   return (
-    <>
-      <h2 style={{ marginTop: "3rem" }}>Image Data</h2>
-      <div className="imagePage">
-        {image && (
-          <>
-            <div style={{ width: "100%", position: "sticky", top: 0 }}>
-              <h3>Title</h3>
-              <p>{image.title}</p>
-              <div className="imageTags">
-                <div>
-                  <h3>Related Image Tags</h3>
-                  <ul>
-                    {image.related_image_tags.map((tag, idx) => (
-                      <li key={tag + idx}>{tag}</li>
-                    ))}
-                  </ul>
-                </div>
-                <div>
-                  <h3>Annotated Image Tags</h3>
-                  <ul>
-                    {image.annotated_image_tags.map((tag, idx) => (
-                      <li key={tag + idx}>{tag}</li>
-                    ))}
-                  </ul>
-                </div>
+    <div className="imagePage">
+      {image && (
+        <>
+          <div>
+            <h2>Image Data</h2>
+            <h3>Title</h3>
+            <p>{image.title}</p>
+            <div className="imageTags">
+              <div>
+                <h3>Related Image Tags</h3>
+                <ul>
+                  {image.related_image_tags.map((tag, idx) => (
+                    <li key={tag + idx}>{tag}</li>
+                  ))}
+                </ul>
+              </div>
+              <div>
+                <h3>Annotated Image Tags</h3>
+                <ul>
+                  {image.annotated_image_tags.map((tag, idx) => (
+                    <li key={tag + idx}>{tag}</li>
+                  ))}
+                </ul>
               </div>
             </div>
-            <img
-              src={image.url}
-              alt={image.title}
-            />
-          </>
-        )}
-      </div>
-    </>
+          </div>
+          <img src={image.url} alt={image.title} />
+        </>
+      )}
+    </div>
   );
 };
 
