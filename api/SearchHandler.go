@@ -212,7 +212,7 @@ func fetchAndFormatDocuments(appData types.JsonData, documentIDs []string) []typ
 			_, exists := uniqueURLs[cleanedURL]
 			if !exists {
 				// If URL is not found, add the ImageData to the slice and mark the URL as encountered
-				imageData.URL = cleanedURL
+				imageData.ID = docID
 				imageDatas = append(imageDatas, imageData)
 				uniqueURLs[cleanedURL] = struct{}{}
 			}
