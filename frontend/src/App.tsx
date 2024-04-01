@@ -51,8 +51,8 @@ function App() {
       <div
         style={{
           padding: 20,
-          textAlign: "center",
-          maxWidth: 600,
+          // textAlign: "center",
+          maxWidth: 680,
         }}
       >
         <p>
@@ -71,19 +71,38 @@ function App() {
           <a target="_blank" href="https://dcu.ie">
             Dublin City University
           </a>
-          .
+          . The goal of this project is to develop an image based search engine
+          using annotations and image features.
         </p>
         <p>
-          This project indexes images from{" "}
+          This project uses images from{" "}
           <a target="_blank" href="https://unsplash.com">
             Unsplash
           </a>{" "}
-          and the license for the images can be found{" "}
+          and the license to use the images can be found{" "}
           <a target="_blank" href="https://unsplash.com/license">
             here
           </a>
-          . This search engine is <strong>NOT</strong> a competitor to Unsplash
-          and is developed for educational purposes only.
+          .
+        </p>
+        <p>
+          This search engine is <strong>NOT</strong> a competitor to Unsplash in
+          any way and is developed for educational purposes only.
+        </p>
+        <p>
+          <strong>ALL</strong> images you see in this website belong to Unsplash
+          alone.
+        </p>
+        <p>
+          In the off chance that anyone from Unsplash is viewing this, please{" "}
+          <a
+            target="_blank"
+            href="mailto:aferrefkd@yomail.info"
+            style={{ textDecoration: "underline" }}
+          >
+            email me
+          </a>{" "}
+          if you have any concerns.
         </p>
       </div>
     </div>
