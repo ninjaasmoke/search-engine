@@ -35,7 +35,7 @@ const ImagePage = () => {
     <div className="imagePage">
       {image && (
         <>
-          <div>
+          <div style={{ width: "100%" }}>
             <h2>Image Data</h2>
             <h3>Title</h3>
             <p>{image.title}</p>
@@ -58,7 +58,10 @@ const ImagePage = () => {
               </div>
             </div>
           </div>
-          <img src={image.url} alt={image.title} />
+          <img
+            src={image.url}
+            alt={image.title}
+          />
         </>
       )}
     </div>

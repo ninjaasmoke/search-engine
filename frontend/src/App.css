@@ -39,16 +39,15 @@ a:hover {
     .imagePage {
         flex-direction: column-reverse;
         align-items: center;
+        padding: 20px 0;
     }
 }
 
 .imagePage img {
     max-height: 500px;
-    max-width: 500px;
+    max-width: 100%;
     object-fit: contain;
     border-radius: 0.25rem;
-    position: sticky;
-    top: 0;
 }
 
 .imageTags {
