@@ -1,0 +1,33 @@
+.quickSearches {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+}
+
+.quickSearchImage {
+    max-width: 250px;
+    max-height: 150px;
+    object-fit: cover;
+}
+
+@media screen and (max-width: 1068px) {
+    .quickSearches {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media screen and (max-width: 800px) {
+    .quickSearches {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media screen and (max-width: 500px) {
+    .quickSearches {
+        grid-template-columns: 1fr;
+    }
+
+    .quickSearchImage {
+        max-width: 100%;
+        max-height: 100%;
+    }
+}
