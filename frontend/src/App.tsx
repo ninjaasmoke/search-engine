@@ -1,8 +1,9 @@
 import SearchInputComponent from "../components/SearchInput.component";
+import QuickSearches from "../components/QuickSearches";
 
 import { useEffect, useState } from "react";
-import "./App.css";
 import { Link, useNavigate } from "react-router-dom";
+import "./App.css";
 
 function App() {
   const navigate = useNavigate();
@@ -48,6 +49,9 @@ function App() {
           />
         </div>
       </div>
+
+      <QuickSearches />
+
       <Link
         to={`/about`}
         style={{
