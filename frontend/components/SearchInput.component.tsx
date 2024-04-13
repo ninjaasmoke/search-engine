@@ -48,7 +48,7 @@ function SearchInputComponent({ searchText, handleChange }: SearchInputProps) {
       }, 250); // Adjust typing speed here
 
       return () => clearInterval(interval);
-    }, 2000); // Delay before typing starts
+    }, 1000); // Delay before typing starts
 
     return () => clearTimeout(timeout);
   }, [currentPlaceholderIndex]);
