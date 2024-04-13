@@ -14,6 +14,9 @@ const placeholders = [
   "mountain sunrise",
   "beaches",
   "beach sunset",
+  "flowers near Eiffel Tower",
+  "Big Ben",
+  "Statue of Liberty",
 ];
 
 function SearchInputComponent({ searchText, handleChange }: SearchInputProps) {
@@ -25,7 +28,7 @@ function SearchInputComponent({ searchText, handleChange }: SearchInputProps) {
       setCurrentPlaceholderIndex(
         (prevIndex) => (prevIndex + 1) % placeholders.length
       );
-    }, 2000);
+    }, 3500);
 
     return () => clearInterval(interval);
   }, []);
@@ -45,7 +48,7 @@ function SearchInputComponent({ searchText, handleChange }: SearchInputProps) {
             index
           )}`;
         });
-      }, 250); // Adjust typing speed here
+      }, 50); // typing speed here
 
       return () => clearInterval(interval);
     }, 1000); // Delay before typing starts
