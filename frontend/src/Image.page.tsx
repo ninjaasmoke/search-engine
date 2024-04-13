@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { SearchData } from "../types";
 import { API_URL_DEV, API_URL_PROD } from "../constants";
 import { cleanImageUrl } from "./utils/cleanURL";
@@ -59,10 +59,9 @@ const ImagePage = () => {
               </div>
             </div>
           </div>
-          <img
-            src={cleanImageUrl(image.url, 400)}
-            alt={image.title}
-          />
+          <a href={image.url} target="_blank">
+            <img src={cleanImageUrl(image.url, 400)} alt={image.title} />
+          </a>
         </>
       )}
     </div>
