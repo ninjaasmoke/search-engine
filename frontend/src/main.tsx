@@ -7,6 +7,7 @@ import Search from "./Search.page.tsx";
 import App from "./App.tsx";
 
 import "./index.css";
+import AboutPage from "./About.page.tsx";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
@@ -15,6 +16,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
         <Route path="/" element={<App />} />
         <Route path="/search" element={<Search />} />
         <Route path="/image/:id" element={<ImagePage />} />
+        <Route path="/about" element={<AboutPage />} />
         <Route path="*" element={<App />} />
       </Routes>
     </HashRouter>
