@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { SearchData } from "../types";
 import { API_URL_DEV, API_URL_PROD } from "../constants";
 import { cleanImageUrl } from "./utils/cleanURL";
