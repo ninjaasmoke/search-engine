@@ -97,7 +97,7 @@ function App() {
           In the off chance that anyone from Unsplash is viewing this, please{" "}
           <a
             target="_blank"
-            href="mailto:aferrefkd@yomail.info"
+            href="mailto:nithins674@gmail.com"
             style={{ textDecoration: "underline" }}
           >
             email me
