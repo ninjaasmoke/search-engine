@@ -70,7 +70,8 @@ a:hover {
 
 @media (max-width: 480px) {
     .imagePage img {
-        padding-top: 20px;
-        max-width: 100%;
+        margin-top: 20px;
+        width: 100%;
+        /* max-height: fit-content; */
     }
 }
