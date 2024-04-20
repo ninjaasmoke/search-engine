@@ -178,7 +178,7 @@ func SearchHandler(w http.ResponseWriter, r *http.Request) {
 	rankedDocuments := rankDocuments(queryVector, appData.DocumentVectors)
 
 	// Select top documents, considering additional factors such as document length
-	topDocuments := selectTopDocuments(rankedDocuments, 60)
+	topDocuments := selectTopDocuments(rankedDocuments, 30)
 
 	// Retrieve and format top documents
 	uniqueImageDatas := fetchAndFormatDocuments(appData, topDocuments)
