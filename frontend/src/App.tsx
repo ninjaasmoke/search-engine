@@ -10,7 +10,7 @@ function App() {
   const [searchText, setSearchText] = useState("");
 
   const handleSearch = async () => {
-    // window.location.href = `/search?q=${searchText}`;
+    if (!searchText || searchText.length < 1) return;
     navigate(`/search?q=${searchText}`);
   };
 

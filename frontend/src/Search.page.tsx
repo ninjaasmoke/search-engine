@@ -20,8 +20,8 @@ function Search() {
   const fetchSearchResults = async () => {
     const response = await fetch(
       import.meta.env.MODE == "production"
-      ? `${API_URL_PROD}search?q=${searchText.trim()}`
-      : `${API_URL_DEV}search?q=${searchText.trim()}`
+        ? `${API_URL_PROD}search?q=${searchText.trim()}`
+        : `${API_URL_DEV}search?q=${searchText.trim()}`
     );
     if (!response.ok) {
       console.error("Failed to fetch search results");
@@ -42,6 +42,7 @@ function Search() {
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Enter") {
+        if (!searchText || searchText.length < 1) return;
         navigate(`/search?q=${searchText}`);
         fetchSearchResults();
       }
