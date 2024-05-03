@@ -23,4 +23,5 @@ type JsonData struct {
 	TotalDocs         int
 	DocumentFrequency map[string]int
 	DocumentVectors   map[string]DocumentVector
+	AveraageDocLength float64
 }
