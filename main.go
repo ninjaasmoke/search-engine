@@ -51,9 +51,11 @@ func main() {
 	appData.TotalDocs = totalDocs
 	appData.DocumentFrequency = docFreq
 
-	documentVectors := utils.GenerateDocumentVectors(appData)
+	// documentVectors := utils.GenerateDocumentVectors(appData)
 
-	appData.DocumentVectors = documentVectors
+	// appData.DocumentVectors = documentVectors
+
+	appData.AveraageDocLength = utils.GetAverageDocumentLength(docInfoMap)
 
 	mux := http.NewServeMux()
 	ctx := context.WithValue(context.Background(), types.AppDataKey{}, appData)
