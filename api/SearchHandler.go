@@ -7,7 +7,6 @@ import (
 	"net/http"
 	"search-server/types"
 	"search-server/utils"
-	"sort"
 )
 
 // func SearchHandler(w http.ResponseWriter, r *http.Request) {
@@ -175,7 +174,8 @@ func SearchHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Rank documents based on cosine similarity
-	rankedDocuments := rankDocuments(queryVector, appData.DocumentVectors)
+	// rankedDocuments := rankDocuments(queryVector, appData.DocumentVectors)
+	rankedDocuments := utils.BM25Similarity(queryVector, 1.2, 0.75, appData)
 
 	// Select top documents, considering additional factors such as document length
 	topDocuments := selectTopDocuments(rankedDocuments, 30)
@@ -253,46 +253,6 @@ func calculateInverseDocumentFrequency(term string, appData types.JsonData) floa
 	return math.Log(totalDocs / (df + 1))
 }
 
-func rankDocuments(queryVector map[string]float64, documentVectors map[string]types.DocumentVector) []string {
-	// Calculate cosine similarity between query and each document
-	similarityScores := make(map[string]float64)
-	for docID, docVector := range documentVectors {
-		similarityScores[docID] = calculateCosineSimilarity(queryVector, docVector)
-	}
-
-	// Rank documents based on similarity scores
-	return rankByScore(similarityScores)
-}
-
-func calculateCosineSimilarity(vector1, vector2 map[string]float64) float64 {
-	// Compute dot product
-	dotProduct := 0.0
-	for term, tfidf1 := range vector1 {
-		tfidf2, exists := vector2[term]
-		if exists {
-			dotProduct += tfidf1 * tfidf2
-		}
-	}
-
-	// Compute magnitudes
-	magnitude1 := calculateMagnitude(vector1)
-	magnitude2 := calculateMagnitude(vector2)
-
-	// Compute cosine similarity
-	if magnitude1 != 0 && magnitude2 != 0 {
-		return dotProduct / (magnitude1 * magnitude2)
-	}
-	return 0
-}
-
-func calculateMagnitude(vector map[string]float64) float64 {
-	sum := 0.0
-	for _, value := range vector {
-		sum += value * value
-	}
-	return math.Sqrt(sum)
-}
-
 func selectTopDocuments(rankedDocuments []string, count int) []string {
 	if len(rankedDocuments) <= count {
 		return rankedDocuments
@@ -300,26 +260,66 @@ func selectTopDocuments(rankedDocuments []string, count int) []string {
 	return rankedDocuments[:count]
 }
 
-func rankByScore(scores map[string]float64) []string {
-	// Convert map to slice of {docID, score} pairs and sort by score
-	type pair struct {
-		docID string
-		score float64
-	}
-	pairs := make([]pair, len(scores))
-	i := 0
-	for docID, score := range scores {
-		pairs[i] = pair{docID, score}
-		i++
-	}
-	sort.Slice(pairs, func(i, j int) bool {
-		return pairs[i].score > pairs[j].score
-	})
+// func rankDocuments(queryVector map[string]float64, documentVectors map[string]types.DocumentVector) []string {
+// 	// Calculate cosine similarity between query and each document
+// 	similarityScores := make(map[string]float64)
+// 	for docID, docVector := range documentVectors {
+// 		similarityScores[docID] = calculateCosineSimilarity(queryVector, docVector)
+// 	}
 
-	// Extract sorted document IDs
-	result := make([]string, len(pairs))
-	for i, pair := range pairs {
-		result[i] = pair.docID
-	}
-	return result
-}
+// 	// Rank documents based on similarity scores
+// 	return rankByScore(similarityScores)
+// }
+
+// func calculateCosineSimilarity(vector1, vector2 map[string]float64) float64 {
+// 	// Compute dot product
+// 	dotProduct := 0.0
+// 	for term, tfidf1 := range vector1 {
+// 		tfidf2, exists := vector2[term]
+// 		if exists {
+// 			dotProduct += tfidf1 * tfidf2
+// 		}
+// 	}
+
+// 	// Compute magnitudes
+// 	magnitude1 := calculateMagnitude(vector1)
+// 	magnitude2 := calculateMagnitude(vector2)
+
+// 	// Compute cosine similarity
+// 	if magnitude1 != 0 && magnitude2 != 0 {
+// 		return dotProduct / (magnitude1 * magnitude2)
+// 	}
+// 	return 0
+// }
+
+// func calculateMagnitude(vector map[string]float64) float64 {
+// 	sum := 0.0
+// 	for _, value := range vector {
+// 		sum += value * value
+// 	}
+// 	return math.Sqrt(sum)
+// }
+
+// func rankByScore(scores map[string]float64) []string {
+// 	// Convert map to slice of {docID, score} pairs and sort by score
+// 	type pair struct {
+// 		docID string
+// 		score float64
+// 	}
+// 	pairs := make([]pair, len(scores))
+// 	i := 0
+// 	for docID, score := range scores {
+// 		pairs[i] = pair{docID, score}
+// 		i++
+// 	}
+// 	sort.Slice(pairs, func(i, j int) bool {
+// 		return pairs[i].score > pairs[j].score
+// 	})
+
+// 	// Extract sorted document IDs
+// 	result := make([]string, len(pairs))
+// 	for i, pair := range pairs {
+// 		result[i] = pair.docID
+// 	}
+// 	return result
+// }
