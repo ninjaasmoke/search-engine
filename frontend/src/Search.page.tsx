@@ -3,7 +3,7 @@ import SearchResults from "../components/SearchResults";
 
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { SearchData } from "../types";
+import { SearchResponse } from "../types";
 import { API_URL_DEV, API_URL_PROD } from "../constants";
 
 function Search() {
@@ -11,24 +11,28 @@ function Search() {
 
   const [searchParams] = useSearchParams();
   const query = searchParams.get("q") || "";
+  const skipSpellCheck = searchParams.get("skipSpellCheck") === "true";
 
   const [searchText, setSearchText] = useState(query);
   const [isLoading, setIsLoading] = useState(true);
 
-  const [searchResults, setSearchResults] = useState([] as SearchData[]);
+  const [searchResults, setSearchResults] = useState({} as SearchResponse);
 
   const fetchSearchResults = async () => {
     const response = await fetch(
+      // import.meta.env.MODE == "production"
+      //   ? `${API_URL_PROD}search?q=${searchText.trim()}`
+      //   : `${API_URL_DEV}search?q=${searchText.trim()}`
       import.meta.env.MODE == "production"
-        ? `${API_URL_PROD}search?q=${searchText.trim()}`
-        : `${API_URL_DEV}search?q=${searchText.trim()}`
+        ? `${API_URL_PROD}search${skipSpellCheck ? "/noCheck" : ''}?q=${searchText.trim()}`
+        : `${API_URL_DEV}search${skipSpellCheck ? "/noCheck" : ''}?q=${searchText.trim()}` 
     );
     if (!response.ok) {
       console.error("Failed to fetch search results");
       return;
     }
 
-    const data = (await response.json()) as SearchData[];
+    const data = (await response.json()) as SearchResponse;
 
     setSearchResults(data);
     setIsLoading(false);
@@ -79,7 +83,7 @@ function Search() {
         >
           Loading...
         </div>
-      ) : searchResults === null || searchResults.length === 0 ? (
+      ) : searchResults === null || searchResults.Documents == null || searchResults.Documents.length === 0 ? (
         <div
           style={{
             marginTop: "1rem",
@@ -89,7 +93,11 @@ function Search() {
           No results found
         </div>
       ) : (
-        <SearchResults searchResults={searchResults} />
+        <SearchResults
+          searchResults={searchResults.Documents}
+          correctedQuery={searchResults.CorrectedQuery}
+          originalQuery={searchResults.Query}
+        />
       )}
     </div>
   );
