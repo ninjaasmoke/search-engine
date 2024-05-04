@@ -1,4 +1,4 @@
-package models
+package trie
 
 import (
 	"strings"

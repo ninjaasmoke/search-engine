@@ -3,11 +3,11 @@ package utils
 import (
 	"bufio"
 	"os"
-	"search-server/models"
+	"search-server/trie"
 	"strings"
 )
 
-func LoadWords(filename string, trie *models.Trie) ([]string, error) {
+func LoadWords(filename string, trie *trie.Trie) ([]string, error) {
 	file, err := os.Open(filename)
 	if err != nil {
 		return nil, err

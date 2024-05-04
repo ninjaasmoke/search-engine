@@ -1,6 +1,8 @@
 package types
 
-import "search-server/models"
+import (
+	"search-server/trie"
+)
 
 type ImageData struct {
 	ID                 string   `json:"id"`
@@ -26,5 +28,5 @@ type JsonData struct {
 	DocumentFrequency map[string]int
 	DocumentVectors   map[string]DocumentVector
 	AveraageDocLength float64
-	Trie              *models.Trie
+	Trie              *trie.Trie
 }
