@@ -9,147 +9,7 @@ import (
 	"search-server/utils"
 )
 
-// func SearchHandler(w http.ResponseWriter, r *http.Request) {
-// 	ctx := r.Context()
-// 	appData, ok := ctx.Value(types.AppDataKey{}).(types.JsonData)
-
-// 	if !ok {
-// 		http.Error(w, "Failed to retrieve appData", http.StatusInternalServerError)
-// 		return
-// 	}
-
-// 	query := r.URL.Query().Get("q")
-
-// 	queryTerms := utils.TokenizeText(query)
-
-// 	idf := make(map[string]float64)
-// 	for _, term := range queryTerms {
-// 		idf[term] = math.Log(float64(appData.TotalDocs) / float64(appData.DocumentFrequency[term]+1))
-// 	}
-
-// 	documentScores := make(map[string]float64)
-// 	for _, term := range queryTerms {
-// 		if info, found := appData.InvertedIndexMap[term]; found {
-// 			for docID, tf := range info.TF {
-// 				if _, found := documentScores[docID]; !found {
-// 					documentScores[docID] = 0
-// 				}
-// 				documentScores[docID] += float64(tf) * idf[term]
-// 			}
-// 		}
-// 	}
-
-// 	rankedDocuments := make([]string, 0, len(documentScores))
-// 	for docID := range documentScores {
-// 		rankedDocuments = append(rankedDocuments, docID)
-// 	}
-
-// 	sort.Strings(rankedDocuments)
-
-// 	documentTitles := make(map[string]bool)
-// 	var uniqueRankedDocuments []string
-
-// 	for _, docID := range rankedDocuments {
-// 		imageData, found := appData.DocumentInfoMap[docID]
-// 		if found {
-// 			if _, exists := documentTitles[imageData.Title]; !exists {
-// 				documentTitles[imageData.Title] = true
-// 				uniqueRankedDocuments = append(uniqueRankedDocuments, docID)
-// 				if len(uniqueRankedDocuments) >= 30 {
-// 					break
-// 				}
-// 			}
-// 		}
-// 	}
-
-// 	// Retrieve ImageData for the top 30 unique documents
-// 	var uniqueImageDatas []types.ImageData
-// 	for _, docID := range uniqueRankedDocuments {
-// 		imageData, found := appData.DocumentInfoMap[docID]
-// 		if found {
-// 			uniqueImageDatas = append(uniqueImageDatas, imageData)
-// 		}
-// 	}
-
-// 	// Marshal ImageData to JSON
-// 	responseJSON, err := json.Marshal(uniqueImageDatas)
-// 	if err != nil {
-// 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
-// 		log.Println("Error marshaling JSON:", err)
-// 		return
-// 	}
-
-// 	// Set Content-Type header
-// 	w.Header().Set("Content-Type", "application/json")
-
-// 	// Write response
-// 	w.Write(responseJSON)
-
-// }
-
-// func SearchHandler(w http.ResponseWriter, r *http.Request) {
-// 	ctx := r.Context()
-// 	appData, ok := ctx.Value(types.AppDataKey{}).(types.JsonData)
-
-// 	if !ok {
-// 		http.Error(w, "Failed to retrieve appData", http.StatusInternalServerError)
-// 		return
-// 	}
-
-// 	// Tokenize and preprocess the query
-// 	query := r.URL.Query().Get("q")
-// 	queryTerms := utils.TokenizeText(query)
-
-// 	// Calculate TF-IDF for query terms
-// 	queryVector := make(map[string]float64)
-// 	for _, term := range queryTerms {
-// 		queryVector[term] = math.Log(float64(appData.TotalDocs) / float64(appData.DocumentFrequency[term]+1))
-// 	}
-
-// 	// Rank documents based on cosine similarity
-// 	rankedDocuments := utils.RankDocuments(queryVector, appData.DocumentVectors)
-
-// 	topDocuments := rankedDocuments[:40]
-
-// 	// Create a map to store unique URLs
-// 	uniqueURLs := make(map[string]struct{})
-
-// 	// Slice to store unique ImageData entries
-// 	uniqueImageDatas := make([]types.ImageData, 0, len(topDocuments))
-
-// 	// Iterate over topDocuments to filter out duplicates based on URL
-// 	for _, docID := range topDocuments {
-// 		imageData, found := appData.DocumentInfoMap[docID]
-// 		imageData.ID = docID
-// 		if found {
-// 			// Clean the URL
-// 			cleanedURL := utils.CleanImageURL(imageData.URL, 400)
-
-// 			// Check if the cleaned URL is already in the map of unique URLs
-// 			_, exists := uniqueURLs[cleanedURL]
-// 			if !exists {
-// 				// If URL is not found, add the ImageData to the slice and mark the URL as encountered
-// 				uniqueImageDatas = append(uniqueImageDatas, imageData)
-// 				uniqueURLs[cleanedURL] = struct{}{}
-// 			}
-// 		}
-// 	}
-
-// 	responseJSON, err := json.Marshal(uniqueImageDatas[:33])
-// 	if err != nil {
-// 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
-// 		log.Println("Error marshaling JSON:", err)
-// 		return
-// 	}
-
-// 	// Set Content-Type header
-// 	w.Header().Set("Content-Type", "application/json")
-
-// 	// Write response
-// 	w.Write(responseJSON)
-// }
-
-func SearchHandler(w http.ResponseWriter, r *http.Request) {
+func SearchHandler(w http.ResponseWriter, r *http.Request, skipSpellCheck bool) {
 
 	// Extract appData from context
 	ctx := r.Context()
@@ -161,11 +21,19 @@ func SearchHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Extract query from request
-	query := r.URL.Query().Get("q")
+	// Extract query and spell check flag from URL parameters
+	values := r.URL.Query()
+
+	query := values.Get("q")
+
+	correctedQuery, isCorrected := query, false
+
+	if !skipSpellCheck {
+		correctedQuery, isCorrected = appData.Trie.SpellCheck(query)
+	}
 
 	// Tokenize and preprocess the query
-	queryTerms := utils.TokenizeText(query)
+	queryTerms := utils.TokenizeText(correctedQuery)
 
 	// Calculate TF-IDF for query terms
 	queryVector := make(map[string]float64)
@@ -184,18 +52,38 @@ func SearchHandler(w http.ResponseWriter, r *http.Request) {
 	uniqueImageDatas := fetchAndFormatDocuments(appData, topDocuments)
 
 	// Marshal JSON response
-	responseJSON, err := json.Marshal(uniqueImageDatas)
+	// if `isCorrected` is true, return an extra field in the response for corrected query
+	var response interface{}
+	if isCorrected {
+		response = struct {
+			Query          string
+			CorrectedQuery string
+			Documents      []types.ImageData
+		}{
+			Query:          query,
+			CorrectedQuery: correctedQuery,
+			Documents:      uniqueImageDatas,
+		}
+	} else {
+		response = struct {
+			Query     string
+			Documents []types.ImageData
+		}{
+			Query:     query,
+			Documents: uniqueImageDatas,
+		}
+	}
+
+	jsonResponse, err := json.Marshal(response)
 	if err != nil {
-		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
-		log.Println("Error marshaling JSON:", err)
+		log.Println("Error marshalling JSON response:", err)
+		http.Error(w, "Failed to marshal JSON response", http.StatusInternalServerError)
 		return
 	}
 
-	// Set Content-Type header
+	// Write JSON response
 	w.Header().Set("Content-Type", "application/json")
-
-	// Write response
-	w.Write(responseJSON)
+	w.Write(jsonResponse)
 }
 
 func fetchAndFormatDocuments(appData types.JsonData, documentIDs []string) []types.ImageData {
