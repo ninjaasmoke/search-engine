@@ -4,12 +4,19 @@ import { SearchData } from "../types";
 import SearchImage from "./SearchImage";
 
 import "./SearchResults.css";
+import { Link, useNavigate } from "react-router-dom";
 
 type SearchResultsProps = {
   searchResults: SearchData[];
+  correctedQuery?: string;
+  originalQuery?: string;
 };
 
-function SearchResults({ searchResults }: SearchResultsProps) {
+function SearchResults({
+  searchResults,
+  correctedQuery,
+  originalQuery,
+}: SearchResultsProps) {
   if (searchResults.length === 0) {
     return <div>No results found</div>;
   }
@@ -44,13 +51,59 @@ function SearchResults({ searchResults }: SearchResultsProps) {
   useEffect(() => {
     const scrollHere = document.getElementById("scrollHere");
     if (scrollHere) {
-      scrollHere.scrollIntoView({ behavior: "smooth" });
+      // scrollHere.scrollIntoView({ behavior: "smooth" });
     }
-  }, [searchResults]);
+  }, [searchResults, correctedQuery]);
+
+  const navigate = useNavigate();
+
+  const forceReloadLink = (url: string) => {
+    navigate(url, { replace: true });
+    window.location.reload();
+  };
 
   return (
     <>
       <div id="scrollHere" />
+      {correctedQuery && (
+        <div>
+          showing results for:{" "}
+          <span
+            onClick={() => forceReloadLink(`/search?q=${correctedQuery}`)}
+            style={{
+              cursor: "pointer",
+              color: "blue",
+            }}
+            onMouseOver={(e) => {
+              e.currentTarget.style.textDecoration = "underline";
+            }}
+            onMouseOut={(e) => {
+              e.currentTarget.style.textDecoration = "none";
+            }}
+          >
+            {correctedQuery}
+          </span>
+          <br />
+          show original results:{" "}
+          <span
+            onClick={() =>
+              forceReloadLink(`/search?q=${originalQuery}&skipSpellCheck=true`)
+            }
+            style={{
+              cursor: "pointer",
+              color: "blue",
+            }}
+            onMouseOver={(e) => {
+              e.currentTarget.style.textDecoration = "underline";
+            }}
+            onMouseOut={(e) => {
+              e.currentTarget.style.textDecoration = "none";
+            }}
+          >
+            {originalQuery}
+          </span>
+        </div>
+      )}
       <div className="gridContainerLg">
         <div className="gridItem">
           {column1Lg.map((result, index) => (
