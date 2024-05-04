@@ -54,6 +54,7 @@ COPY api/ ./api/
 COPY types/ ./types/
 COPY utils/ ./utils/
 COPY models/ ./models/
+COPY data/ ./data/
 
 RUN go build -o search_engine .
 
