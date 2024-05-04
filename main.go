@@ -2,9 +2,11 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"net/http"
 	"search-server/api"
+	"search-server/models"
 	"search-server/types"
 	"search-server/utils"
 )
@@ -34,6 +36,15 @@ func main() {
 	docInfoFile := "document_info_map.json"
 	invertedIndexFile := "final_inverted_index.json"
 
+	wordListFile := "data/words.txt"
+	// Load words from the text file
+	trie := models.NewTrie()
+	_, err := utils.LoadWords(wordListFile, trie)
+	if err != nil {
+		fmt.Println("Error loading words:", err)
+		return
+	}
+
 	docInfoMap, err := utils.ReadDocumentInfoJson(docInfoFile)
 	if err != nil {
 		log.Fatal(err)
@@ -50,9 +61,9 @@ func main() {
 	appData.InvertedIndexMap = invertedIndexMap
 	appData.TotalDocs = totalDocs
 	appData.DocumentFrequency = docFreq
+	appData.Trie = trie
 
 	// documentVectors := utils.GenerateDocumentVectors(appData)
-
 	// appData.DocumentVectors = documentVectors
 
 	appData.AveraageDocLength = utils.GetAverageDocumentLength(docInfoMap)
@@ -66,7 +77,10 @@ func main() {
 		api.ImageDataHandler(w, r.WithContext(ctx))
 	})
 	mux.HandleFunc("/api/search", func(w http.ResponseWriter, r *http.Request) {
-		api.SearchHandler(w, r.WithContext(ctx))
+		api.SearchHandler(w, r.WithContext(ctx), false)
+	})
+	mux.HandleFunc("/api/search/noCheck", func(w http.ResponseWriter, r *http.Request) {
+		api.SearchHandler(w, r.WithContext(ctx), true)
 	})
 
 	// Define a route for the root URL
