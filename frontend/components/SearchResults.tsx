@@ -4,7 +4,7 @@ import { SearchData } from "../types";
 import SearchImage from "./SearchImage";
 
 import "./SearchResults.css";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 type SearchResultsProps = {
   searchResults: SearchData[];
