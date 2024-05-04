@@ -6,7 +6,7 @@ import (
 	"log"
 	"net/http"
 	"search-server/api"
-	"search-server/trie"
+	"search-server/models"
 	"search-server/types"
 	"search-server/utils"
 )
@@ -38,7 +38,7 @@ func main() {
 
 	wordListFile := "data/words.txt"
 	// Load words from the text file
-	trie := trie.NewTrie()
+	trie := models.NewTrie()
 	_, err := utils.LoadWords(wordListFile, trie)
 	if err != nil {
 		fmt.Println("Error loading words:", err)
