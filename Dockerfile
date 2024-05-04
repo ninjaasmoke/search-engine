@@ -53,6 +53,7 @@ COPY main.go ./
 COPY api/ ./api/
 COPY types/ ./types/
 COPY utils/ ./utils/
+COPY models/ ./models/
 
 RUN go build -o search_engine .
 
