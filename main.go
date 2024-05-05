@@ -9,6 +9,7 @@ import (
 	"search-server/models"
 	"search-server/types"
 	"search-server/utils"
+	"time"
 )
 
 // CorsMiddleware adds CORS headers to every request
@@ -29,6 +30,13 @@ func CorsMiddleware(next http.Handler) http.Handler {
 
 		// Call the next handler in the chain
 		next.ServeHTTP(w, r)
+	})
+}
+
+func searchHandlerAdapter(handlerFunc func(http.ResponseWriter, *http.Request, bool), skipSpellCheck bool) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		// You can set a default value for skipSpellCheck here if needed
+		handlerFunc(w, r, skipSpellCheck)
 	})
 }
 
@@ -68,19 +76,27 @@ func main() {
 
 	appData.AveraageDocLength = utils.GetAverageDocumentLength(docInfoMap)
 
+	limiter := utils.NewRateLimiter(10, time.Minute)
+
 	mux := http.NewServeMux()
 	ctx := context.WithValue(context.Background(), types.AppDataKey{}, appData)
 
 	// Define API routes with "/api" prefix
 	mux.HandleFunc("/api/ping/", http.HandlerFunc(api.PingHandler))
 	mux.HandleFunc("/api/imageData/", func(w http.ResponseWriter, r *http.Request) {
-		api.ImageDataHandler(w, r.WithContext(ctx))
+		// api.ImageDataHandler(w, r.WithContext(ctx))
+		handler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			api.ImageDataHandler(w, r.WithContext(ctx))
+		})
+		limiter.Limit(handler).ServeHTTP(w, r.WithContext(ctx))
 	})
 	mux.HandleFunc("/api/search", func(w http.ResponseWriter, r *http.Request) {
-		api.SearchHandler(w, r.WithContext(ctx), false)
+		// api.SearchHandler(w, r.WithContext(ctx), false)
+		limiter.Limit(searchHandlerAdapter(api.SearchHandler, false)).ServeHTTP(w, r.WithContext(ctx))
 	})
 	mux.HandleFunc("/api/search/noCheck", func(w http.ResponseWriter, r *http.Request) {
-		api.SearchHandler(w, r.WithContext(ctx), true)
+		// api.SearchHandler(w, r.WithContext(ctx), true)
+		limiter.Limit(searchHandlerAdapter(api.SearchHandler, true)).ServeHTTP(w, r.WithContext(ctx))
 	})
 
 	// Define a route for the root URL
