@@ -49,12 +49,12 @@ RUN go mod download
 
 COPY document_info_map.json ./
 COPY final_inverted_index.json ./
+COPY words.txt ./
 COPY main.go ./
 COPY api/ ./api/
 COPY types/ ./types/
 COPY utils/ ./utils/
 COPY models/ ./models/
-COPY data/ ./data/
 
 RUN go build -o search_engine .
 
@@ -67,6 +67,7 @@ COPY --from=backend-builder /app/search_engine ./
 COPY --from=frontend-builder /app/frontend/dist ./dist
 COPY --from=backend-builder /app/document_info_map.json ./
 COPY --from=backend-builder /app/final_inverted_index.json ./
+COPY --from=backend-builder /app/words.txt ./
 
 EXPOSE 8080
 
