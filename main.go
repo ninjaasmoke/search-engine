@@ -9,7 +9,6 @@ import (
 	"search-server/models"
 	"search-server/types"
 	"search-server/utils"
-	"time"
 )
 
 // CorsMiddleware adds CORS headers to every request
@@ -76,7 +75,7 @@ func main() {
 
 	appData.AveraageDocLength = utils.GetAverageDocumentLength(docInfoMap)
 
-	limiter := utils.NewRateLimiter(10, time.Minute)
+	// limiter := utils.NewRateLimiter(10, time.Minute)
 
 	mux := http.NewServeMux()
 	ctx := context.WithValue(context.Background(), types.AppDataKey{}, appData)
@@ -84,28 +83,28 @@ func main() {
 	// Define API routes with "/api" prefix
 	mux.HandleFunc("/api/ping/", http.HandlerFunc(api.PingHandler))
 	mux.HandleFunc("/api/imageData/", func(w http.ResponseWriter, r *http.Request) {
-		// api.ImageDataHandler(w, r.WithContext(ctx))
-		handler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			api.ImageDataHandler(w, r.WithContext(ctx))
-		})
-		limiter.Limit(handler).ServeHTTP(w, r.WithContext(ctx))
+		api.ImageDataHandler(w, r.WithContext(ctx))
+		// handler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		// 	api.ImageDataHandler(w, r.WithContext(ctx))
+		// })
+		// limiter.Limit(handler).ServeHTTP(w, r.WithContext(ctx))
 	})
 	mux.HandleFunc("/api/search", func(w http.ResponseWriter, r *http.Request) {
-		// api.SearchHandler(w, r.WithContext(ctx), false)
-		limiter.Limit(searchHandlerAdapter(api.SearchHandler, false)).ServeHTTP(w, r.WithContext(ctx))
+		api.SearchHandler(w, r.WithContext(ctx), false)
+		// limiter.Limit(searchHandlerAdapter(api.SearchHandler, false)).ServeHTTP(w, r.WithContext(ctx))
 	})
 	mux.HandleFunc("/api/search/noCheck", func(w http.ResponseWriter, r *http.Request) {
-		// api.SearchHandler(w, r.WithContext(ctx), true)
-		limiter.Limit(searchHandlerAdapter(api.SearchHandler, true)).ServeHTTP(w, r.WithContext(ctx))
+		api.SearchHandler(w, r.WithContext(ctx), true)
+		// limiter.Limit(searchHandlerAdapter(api.SearchHandler, true)).ServeHTTP(w, r.WithContext(ctx))
 	})
 
 	// Define a route for the root URL
 	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		// api.FrontendHandler(w, r.WithContext(ctx))
-		handler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			api.FrontendHandler(w, r.WithContext(ctx))
-		})
-		limiter.Limit(handler).ServeHTTP(w, r.WithContext(ctx))
+		api.FrontendHandler(w, r.WithContext(ctx))
+		// handler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		// 	api.FrontendHandler(w, r.WithContext(ctx))
+		// })
+		// limiter.Limit(handler).ServeHTTP(w, r.WithContext(ctx))
 	})
 
 	wrappedMux := CorsMiddleware(mux)
