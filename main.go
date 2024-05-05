@@ -101,7 +101,11 @@ func main() {
 
 	// Define a route for the root URL
 	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		api.FrontendHandler(w, r.WithContext(ctx))
+		// api.FrontendHandler(w, r.WithContext(ctx))
+		handler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			api.FrontendHandler(w, r.WithContext(ctx))
+		})
+		limiter.Limit(handler).ServeHTTP(w, r.WithContext(ctx))
 	})
 
 	wrappedMux := CorsMiddleware(mux)
