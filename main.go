@@ -35,8 +35,8 @@ func CorsMiddleware(next http.Handler) http.Handler {
 func main() {
 	docInfoFile := "document_info_map.json"
 	invertedIndexFile := "final_inverted_index.json"
+	wordListFile := "words.txt"
 
-	wordListFile := "data/words.txt"
 	// Load words from the text file
 	trie := models.NewTrie()
 	_, err := utils.LoadWords(wordListFile, trie)
